@@ -1,10 +1,15 @@
-## The two functions included in this program are designed to improve efficiency for matrix inversion.
-## The user must provide an invertible square matrix (ie., the matrix's number of rows and columns are equal,
+## The two functions in this program improve efficiency for matrix inversion.
+## The user must provide an invertible square matrix 
+## (ie., the matrix's number of rows and columns are equal,
 ## and the matrix's determinant is nonzero.)
-## The functions will allow the user to invert the matrix, store that result in a cache, and then return the
-## inverted result from the cache for all subsequent inversion requests of the same matrix. 
-## The computationally-intensive inversion process only occurs once per R session, as long as the original
-## matrix is unchanged.
+## The inversion process only occurs once per R session, as long as 
+## the original matrix is unchanged.
+
+## makeCacheMatrix takes an invertible square matrix as an input.
+## It returns a list of four functions that can be called by
+## cacheSolve to avoid unnecessarily repeated inversions.
+## Example: > mymatrix <- matrix(c(13, 7, 1, 22), 2, 2)  
+##          > myfunctionlist <- makeCacheMatrix(mymatrix)
 
 makeCacheMatrix <- function(x = matrix()) {
     m <- NULL
@@ -20,10 +25,12 @@ makeCacheMatrix <- function(x = matrix()) {
        getinverse = getinverse)
 }
 
-
-## Write a short comment describing this function
-## Return a matrix that is the inverse of 'x'
-
+## cacheSolve uses the list of functions produced by makeCacheMatrix as input.
+## It inverts and returns the inverse of the matrix the first time it is run
+## in a session, or if makeCacheMatrix is rerun in a session.
+## For subsequent runs on the same input matrix, it returns the result
+## from cache memory and notifies the user it has done so.
+## Example: > myinvertedmatrix <- cacheSolve(myfunctionlist)
 
 cacheSolve <- function(x, ...) {
   m <- x$getinverse()
